@@ -6,6 +6,7 @@ var express = require('express'),
 // and populate the req.body object
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); 
 
 /************
  * DATABASE *
@@ -82,13 +83,13 @@ app.get('/api/places_traveled', function(req, res){
   });
 });
 
-console.log(req.body);
-
 //CREATE A NEW PLACE
 // create new place
 app.post('/api/places_traveled', function (req, res) {
   // create new place
-  var newPlace = new db.Place({
+  var newPlace;
+  console.log(req.body);
+  newPlace = new db.Place({
     city: req.body.city,
     state: req.body.state,
     country: req.body.country,
@@ -101,10 +102,20 @@ app.post('/api/places_traveled', function (req, res) {
         return console.log("save error: " + err);
       }
       // send back the place
-      res.json(place);
+      res.json(place); 
     });
+     
 });
 
+//DELETE A PLACE
+app.delete('/api/places_traveled/:id', function (req, res) {
+  // get book id from url params (`req.params`)
+  var placeId = req.params.id;
+  // find the index of the book we want to remove
+  db.Place.findOneAndRemove({ _id: placeId }, function (err, deletedPlace) {
+    res.json(deletedPlace);
+  });
+});
 
 //GET PLACES TRAVELED
 /*app.get('/api/places_traveled', function (req, res) {
