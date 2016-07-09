@@ -4,3 +4,6 @@ mongoose.connect( process.env.MONGOLAB_URI ||
                   "mongodb://localhost/personal-api");
 
 // module.exports.Campsite = require("./campsite.js.example");
+
+module.exports.places_traveled = require("./places_traveled.js");
+module.exports.profile = require("./profile.js");
