@@ -11,10 +11,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * DATABASE *
  ************/
 
-//var db = require('./models');
+var db = require('./models');
 
 /************
- * OBJECTS *
+ * PROFILE DATA*
  ************/
 
 var profile_data = {
@@ -32,72 +32,6 @@ var profile_data = {
           { name: "Gracie", type: "dog", age: 7 },
         ]
 };
-
-var places_traveled = [
-    {
-    _id: 1,
-    city: "Cincinnati, Ohio",
-    state: "Ohio",
-    country: "USA",
-    liked: true
-    },
-    {
-    _id: 2,
-    city: "San Diego",
-    state: "California",
-    country: "USA",
-    liked: true
-    },
-    {
-    _id: 3,
-    city: "Cabo San Lucas",
-    state: "Baja California Sur",
-    country: "Mexico",
-    liked: true
-    },                            
-  {
-    _id: 4,
-    city: "Mobile",
-    state: "Alabama",
-    country: "USA",
-    liked: false
-    },
-    {
-    _id: 5,
-    city: "Nashville",
-    state: "Tennessee",
-    country: "USA",
-    liked: true
-    },
-    {
-    _id: 6,
-    city: "Santa Rosa Beach",
-    state: "Florida",
-    country: "USA",
-    liked: true
-    },
-    {
-    _id: 7,
-    city: "Seattle",
-    state: "Washington",
-    country: "USA",
-    liked: true
-    },
-    {
-    _id: 8,
-    city: "Whitefish",
-    state: "Montana",
-    country: "USA",
-    liked: true
-    },
-    {
-    _id: 9,
-    city: "Petoskey",
-    state: "Michigan",
-    country: "USA",
-    liked: true
-    },
-    ];
 
 /**********
  * ROUTES *
@@ -140,8 +74,40 @@ app.get('/api/profile', function (req, res) {
       res.json(profile_data);
 });
 
+// GET ALL PLACES
+app.get('/api/places_traveled', function(req, res){
+  db.Place.find(function(err, places){
+    if(err){ return console.log("error :", err);}
+    res.json(places);
+  });
+});
+
+console.log(req.body);
+
+//CREATE A NEW PLACE
+// create new place
+app.post('/api/places_traveled', function (req, res) {
+  // create new place
+  var newPlace = new db.Place({
+    city: req.body.city,
+    state: req.body.state,
+    country: req.body.country,
+    liked: req.body.liked
+  });
+
+    // save newPlace to database
+    newPlace.save(function(err, place){
+      if (err) {
+        return console.log("save error: " + err);
+      }
+      // send back the place
+      res.json(place);
+    });
+});
+
+
 //GET PLACES TRAVELED
-app.get('/api/places_traveled', function (req, res) {
+/*app.get('/api/places_traveled', function (req, res) {
       res.json(places_traveled);
 });
 
@@ -162,7 +128,7 @@ app.post('/api/places_traveled', function create(req, res) {
    newPlace._id = places_traveled.length + 1;
    places_traveled.push(newPlace);
    res.json(newPlace);
-});
+});*/
 
 
 /**********

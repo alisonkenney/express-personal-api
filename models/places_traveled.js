@@ -8,6 +8,6 @@ var PlacesTraveledSchema = new Schema({
 	liked: Boolean
 });
 
-var PlacesTraveled = mongoose.model('Places Traveled', PlacesTraveledSchema);
+var Place = mongoose.model('Place', PlacesTraveledSchema);
 
-module.exports = PlacesTraveled;
+module.exports = Place;
