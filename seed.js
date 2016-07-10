@@ -20,7 +20,7 @@ var db = require('./models');
 
 var places_traveled = [
     {
-    "city": "Cincinnati, Ohio",
+    "city": "Cincinnati",
     "state": "Ohio",
     "country": "USA",
     "liked": true
