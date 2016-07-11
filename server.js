@@ -59,13 +59,13 @@ app.get('/api', function api_index(req, res) {
   res.json({
     woops_i_has_forgot_to_document_all_my_endpoints: false, 
     message: "Welcome to my personal api! Here's what you need to know!",
-    documentation_url: "https://github.com/alisonkenney/express-personal-api/documentation/myREADME.md",
+    documentation_url: "https://github.com/alisonkenney/express-personal-api/blob/master/README.md",
     base_url: "https://guarded-dusk-23148.herokuapp.com/", 
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "My profile information"},
       {method: "POST", path: "/api/places_traveled", description: "Describes places I have traveled -E.g. Create a new place traveled"},
-      {method: "PUT", path: "/api/places_traveled/:city", description: "Update a place I have traveled"},
+      {method: "PUT", path: "/api/places_traveled/:id", description: "Update a place I have traveled"},
       {method: "DELETE", path: "/api/places_traveled/:id", description: "Delete a place I have traveled"},
     ]
   });
@@ -85,7 +85,6 @@ app.get('/api/places_traveled', function(req, res){
 });
 
 //CREATE A NEW PLACE
-// create new place
 app.post('/api/places_traveled', function (req, res) {
   // create new place
   var newPlace;
@@ -107,36 +106,13 @@ app.post('/api/places_traveled', function (req, res) {
 });
 
 //UPDATE A PLACE
-app.put('/api/places_traveled/:city', function api_placesUpdate(req, res) {
- //Identify City and Change
- var placeCity = req.params.city;
- var change = req.body;
- //Find Database City
- db.Place.findOne({city: placeCity}, function(err, foundPlace){
-     if (err) {
-       return console.log("error adding place: " + err);
-     } 
-     // Update DB Place
-     if(change.city !== undefined){
-       foundPlace.city = change.city;
-     } 
-     if (change.state !== undefined){
-       foundPlace.state = change.state;
-     } 
-     if (change.country !== undefined){
-       foundPlace.country = change.country;
-     } 
-     if (change.liked !== undefined){
-       foundPlace.liked = change.liked;
-     } 
-     //Save Place to Database
-     foundPlace.save(function(err, foundPlace) {
-       if (err) {
-         return console.log("save error: " + err);
-       }
-       res.json(foundPlace);
-     });
-   });
+app.put('/api/places_traveled/:id', function (req, res) {
+  var placeId = req.params.id;
+  var change = req.body;
+  db.Place.findOneAndUpdate({_id: placeId}, change, function(err, place){
+    if (err) { return console.log("create error: " + err); }
+    res.json(place);
+  });
 });
 
 //DELETE A PLACE
